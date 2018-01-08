@@ -50,7 +50,7 @@ const ItemWrapper = Item.extend`
 const SelectedItem = Item.extend`
   border-radius: ${props => props.theme.borderRadius};
   background-color: ${props => props.theme.colors.neutral.white};
-  border: 1px solid ${props => props.theme.colors.neutral.gray};
+  border: ${props => props.theme.border};
   display: flex;
 
   ${Item} {

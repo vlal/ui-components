@@ -16,7 +16,6 @@ export MatchedText from './MatchedText';
 export CircularProgress from './CircularProgress';
 export LogoProgress from './LogoProgress';
 
-
 export Input from './Input';
 
 export Text from './Text';
@@ -26,3 +25,5 @@ export Alert from './Alert';
 export TimeTravel from './TimeTravel';
 
 export Dropdown from './Dropdown';
+
+export LookupMenu from './LookupMenu';

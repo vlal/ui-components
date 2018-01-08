@@ -3,13 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import omit from 'lodash/omit';
 import styled from 'styled-components';
-
-const placeholder = content => `
-  &::-webkit-input-placeholder {${content}}
-  &:-moz-placeholder           {${content}}
-  &::-moz-placeholder          {${content}}
-  &:-ms-input-placeholder      {${content}}
-`;
+import { placeholder } from 'polished';
 
 const Icon = styled.i`
   visibility: ${props => (props.visible ? 'visible' : 'hidden')};
@@ -35,7 +29,7 @@ const StyledInput = component => styled(component)`
     padding: 0 12px;
     line-height: 36px;
     box-shadow: none;
-    border: 1px solid ${props => props.theme.colors.neutral.gray};
+    border: ${props => props.theme.border};
     border-radius: ${props => props.theme.borderRadius};
   }
 `;
@@ -44,7 +38,8 @@ const ValidationMessage = styled.span`
   font-size: 14px;
   padding-left: 8px;
   visibility: ${props => (props.visible ? 'visible' : 'hidden')};
-  color: ${props => (props.valid ? 'inherit' : props.theme.colors.status.error)};
+  color: ${props =>
+    props.valid ? 'inherit' : props.theme.colors.status.error};
 `;
 
 /**
@@ -103,13 +98,15 @@ class Input extends React.Component {
       <div className={className}>
         <label htmlFor={id}>{label}</label>
         <InputWrapper>
-          <input {...inputProps} ref={(elem) => { this.input = elem; }} />
+          <input
+            {...inputProps}
+            ref={elem => {
+              this.input = elem;
+            }}
+          />
           <Icon visible={!valid} className="fa fa-times-circle" />
         </InputWrapper>
-        <ValidationMessage
-          valid={valid}
-          visible={message}
-        >
+        <ValidationMessage valid={valid} visible={message}>
           {message}
         </ValidationMessage>
       </div>
@@ -134,11 +131,11 @@ Input.propTypes = {
   /**
    * Callback to run when the input is edited by the user
    */
-  onChange: PropTypes.func,
+  onChange: PropTypes.func
 };
 
 Input.defaultProps = {
-  valid: true,
+  valid: true
 };
 
 export default StyledInput(Input);

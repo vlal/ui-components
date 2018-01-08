@@ -61,6 +61,7 @@ const weave = {
     selected: `0px 0px 2px 2px ${colors.lavender}`,
   },
 
+  border: `1px solid ${colors.neutral.gray}`,
   borderRadius: '4px',
 
   // component-specific
