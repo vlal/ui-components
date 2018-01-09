@@ -41,20 +41,25 @@ function isSubComponent(resource) {
 export default function getRoutes(components, examples, docs, styles) {
   const availableExamples = examples.keys();
 
-  const componentRoutes = components.keys().map((resource) => {
+  const componentRoutes = components.keys().map(resource => {
     const name = resource.split('/').pop();
     const component = components(resource).default;
-    const doc = docs(`${resource}`);
+    const doc = docs(resource);
     const example = includes(availableExamples, `./${name}/example.js`)
       ? examples(`./${name}/example.js`).default
       : null;
     return {
       path: name.replace('.js', '').toLowerCase(),
-      component: buildExampleComponent(component, doc, example, isSubComponent(resource))
+      component: buildExampleComponent(
+        component,
+        doc,
+        example,
+        isSubComponent(resource)
+      )
     };
   });
 
-  const styleguideRoutes = styles.keys().map((resource) => {
+  const styleguideRoutes = styles.keys().map(resource => {
     const name = resource.split('/').pop();
     return {
       path: name.replace('.js', '').toLowerCase(),
@@ -70,13 +75,17 @@ export default function getRoutes(components, examples, docs, styles) {
       {
         path: 'components',
         component: ComponentsPage,
-        indexRoute: { onEnter: (nextState, replace) => replace('components/button') },
+        indexRoute: {
+          onEnter: (nextState, replace) => replace('components/button')
+        },
         childRoutes: componentRoutes
       },
       {
         path: 'styleguide',
         component: StyleGuidePage,
-        indexRoute: { onEnter: (nextState, replace) => replace('styleguide/intro') },
+        indexRoute: {
+          onEnter: (nextState, replace) => replace('styleguide/intro')
+        },
         childRoutes: styleguideRoutes
       }
     ]
