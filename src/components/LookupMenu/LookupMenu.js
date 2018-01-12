@@ -6,15 +6,50 @@ import Input from '../Input';
 
 const List = styled.ul`
   list-style: none;
+  margin: 0;
+  padding: 0;
 `;
 
-const Item = styled.li``;
+const Item = styled.li`
+  padding: 8px 16px;
+  line-height: 36px;
+  height: 36px;
+  border-bottom: ${props => props.theme.border};
+  cursor: pointer;
 
-const Header = styled.div``;
+  &:last-child {
+    border: 0;
+  }
+
+  &:hover {
+    background-color: #eee;
+  }
+`;
+
+const Header = styled.div`
+  padding: 16px;
+  background-color: ${props => props.theme.colors.neutral.lightgray};
+  border-bottom: ${props => props.theme.border};
+
+  ${Input} {
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+
+    & > div {
+      margin: 0;
+    }
+
+    & > span {
+      display: none;
+    }
+  }
+`;
 
 const Styled = component => styled(component)`
   border: ${props => props.theme.border};
   border-radius: ${props => props.theme.borderRadius};
+  background-color: ${props => props.theme.colors.white};
 `;
 
 function filterItems(items, query) {
@@ -130,9 +165,11 @@ class LookupMenu extends React.PureComponent {
       <div className={className}>
         <Header>
           <Input
+            placeholder="Search"
             onChange={this.handleSearch}
             onClick={e => e.stopPropagation()}
             onKeyDown={this.handleKeyboardNavigation}
+            message="Message"
           />
         </Header>
         <List>

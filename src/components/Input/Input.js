@@ -31,6 +31,8 @@ const StyledInput = component => styled(component)`
     box-shadow: none;
     border: ${props => props.theme.border};
     border-radius: ${props => props.theme.borderRadius};
+    width: 100%;
+    box-sizing: border-box;
   }
 `;
 
