@@ -91,7 +91,7 @@ function moveSoftSelect({ softSelectedIndex, items }, amt) {
  * ```
  */
 
-class LookupMenu extends React.PureComponent {
+export class LookupMenu extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
 
