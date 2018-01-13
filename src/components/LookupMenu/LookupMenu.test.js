@@ -1,10 +1,11 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import 'jest-styled-components';
+import { map } from 'lodash';
 
 import { withTheme } from '../../utils/theme';
 
-import { LookupMenu } from './LookupMenu';
+import LookupMenu from './LookupMenu';
 import Input from '../Input';
 
 const items = [
@@ -44,7 +45,7 @@ describe('<LookupMenu />', () => {
   });
   it('soft-selects an item', () => {
     const ev = { key: 'ArrowDown', preventDefault: () => {} };
-    const menu = shallow(<LookupMenu items={items} />);
+    const menu = mount(withTheme(<LookupMenu items={items} />));
     const input = menu.find(Input);
 
     input.simulate('keyDown', ev);
@@ -73,5 +74,21 @@ describe('<LookupMenu />', () => {
     input = menu.find(Input);
     input.simulate('keyDown', { ...ev, key: 'ArrowUp' });
     expect(menu.state('softSelectedIndex')).toEqual(0);
+  });
+  it('works with a render prop', () => {
+    const menu = mount(
+      withTheme(
+        <LookupMenu items={items}>
+          {mappedItems =>
+            map(mappedItems, i => (
+              <a key={i.value} href={`/${i.value}`}>
+                {i.label}
+              </a>
+            ))
+          }
+        </LookupMenu>
+      )
+    );
+    expect(menu.find('a').length).toEqual(items.length);
   });
 });

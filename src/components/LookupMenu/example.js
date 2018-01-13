@@ -26,12 +26,9 @@ export default class LookupMenuExample extends React.Component {
   }
 
   render() {
-    const onChange = (ev, value) => {
-      this.setState(() => ({ selected: value }));
-    };
-
+    const onChange = (ev, value) => this.props.clickHandler('onChange', value);
     return (
-      <div style={{maxWidth: 400}}>
+      <div style={{ maxWidth: 400 }}>
         <LookupMenu
           items={items}
           value={this.state.selected}

@@ -91,7 +91,7 @@ function moveSoftSelect({ softSelectedIndex, items }, amt) {
  * ```
  */
 
-export class LookupMenu extends React.PureComponent {
+class LookupMenu extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
 
@@ -103,6 +103,7 @@ export class LookupMenu extends React.PureComponent {
     this.filterItems = this.filterItems.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleKeyboardNavigation = this.handleKeyboardNavigation.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -111,6 +112,14 @@ export class LookupMenu extends React.PureComponent {
 
   componentWillReceiveProps(nextProps) {
     this.filterItems(nextProps);
+
+    // `props.children` should be a function or undefined.
+    // Warn the user that they probably aren't using the component correctly.
+    if (nextProps.children && typeof nextProps.children !== 'function') {
+      console.warn(
+        '<LookupMenu /> children should be a function or undefined. Using the `items` prop instead'
+      );
+    }
   }
 
   filterItems({ items }, query) {
@@ -157,9 +166,30 @@ export class LookupMenu extends React.PureComponent {
     }
   }
 
-  render() {
-    const { className } = this.props;
+  useChildRender() {
+    const collection = map(this.state.items, item => ({
+      ...item,
+      onClick: e => this.handleChange(e, item.value)
+    }));
+    return this.props.children(collection);
+  }
+
+  renderList() {
     const { items, softSelectedIndex } = this.state;
+
+    return map(items, (item, index) => (
+      <Item
+        onClick={e => this.handleChange(e, item.value)}
+        key={item.value}
+        softSelected={index === softSelectedIndex}
+      >
+        {item.label}
+      </Item>
+    ));
+  }
+
+  render() {
+    const { className, children } = this.props;
 
     return (
       <div className={className}>
@@ -169,19 +199,13 @@ export class LookupMenu extends React.PureComponent {
             onChange={this.handleSearch}
             onClick={e => e.stopPropagation()}
             onKeyDown={this.handleKeyboardNavigation}
-            message="Message"
+            message="Search"
           />
         </Header>
         <List>
-          {map(items, (item, index) => (
-            <Item
-              onClick={e => this.handleChange(e, item.value)}
-              key={item.value}
-              softSelected={index === softSelectedIndex}
-            >
-              {item.label}
-            </Item>
-          ))}
+          {children && typeof children === 'function'
+            ? this.useChildRender()
+            : this.renderList()}
         </List>
       </div>
     );
