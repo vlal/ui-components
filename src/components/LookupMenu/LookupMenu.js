@@ -8,18 +8,16 @@ const List = styled.ul`
   list-style: none;
   margin: 0;
   padding: 0;
+
+  overflow-y: auto;
 `;
 
 const Item = styled.li`
   padding: 8px 16px;
   line-height: 36px;
   height: 36px;
-  border-bottom: ${props => props.theme.border};
+  border-bottom: 1px solid ${props => props.theme.colors.neutral.lightgray};
   cursor: pointer;
-
-  &:last-child {
-    border: 0;
-  }
 
   &:hover {
     background-color: #eee;
@@ -28,7 +26,6 @@ const Item = styled.li`
 
 const Header = styled.div`
   padding: 16px;
-  background-color: ${props => props.theme.colors.neutral.lightgray};
   border-bottom: ${props => props.theme.border};
 
   ${Input} {
@@ -37,7 +34,7 @@ const Header = styled.div`
     overflow: hidden;
 
     & > div {
-      margin: 0;
+      margin: 4px;
     }
 
     & > span {
@@ -50,6 +47,8 @@ const Styled = component => styled(component)`
   border: ${props => props.theme.border};
   border-radius: ${props => props.theme.borderRadius};
   background-color: ${props => props.theme.colors.white};
+
+  overflow: hidden;
 `;
 
 function filterItems(items, query) {
@@ -97,6 +96,7 @@ class LookupMenu extends React.PureComponent {
 
     this.state = {
       items: [],
+      query: '',
       softSelectedIndex: null
     };
 
@@ -111,7 +111,7 @@ class LookupMenu extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.filterItems(nextProps);
+    this.filterItems(nextProps, this.state.query);
 
     // `props.children` should be a function or undefined.
     // Warn the user that they probably aren't using the component correctly.
@@ -129,6 +129,7 @@ class LookupMenu extends React.PureComponent {
   }
 
   handleSearch(ev) {
+    this.setState({ query: ev.target.value });
     this.filterItems(this.props, ev.target.value);
   }
 
@@ -171,7 +172,7 @@ class LookupMenu extends React.PureComponent {
       ...item,
       onClick: e => this.handleChange(e, item.value)
     }));
-    return this.props.children(collection);
+    return this.props.children(collection, Item);
   }
 
   renderList() {
@@ -197,7 +198,6 @@ class LookupMenu extends React.PureComponent {
           <Input
             placeholder="Search"
             onChange={this.handleSearch}
-            onClick={e => e.stopPropagation()}
             onKeyDown={this.handleKeyboardNavigation}
             message="Search"
           />

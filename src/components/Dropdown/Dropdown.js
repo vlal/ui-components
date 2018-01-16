@@ -39,7 +39,8 @@ const Overlay = styled.div`
 
 const ItemWrapper = Item.extend`
   line-height: ${HEIGHT};
-  color: ${props => (props.selected ? props.theme.colors.accent.blue : props.theme.textColor)};
+  color: ${props =>
+    props.selected ? props.theme.colors.accent.blue : props.theme.textColor};
   min-height: ${HEIGHT};
 
   &:hover {
@@ -72,7 +73,6 @@ const StyledDropdown = component => styled(component)`
   height: ${HEIGHT};
   line-height: ${HEIGHT};
   position: relative;
-  padding: 8px;
   width: ${WIDTH};
 `;
 
